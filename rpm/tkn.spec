@@ -1,8 +1,10 @@
 %define debug_package %{nil}
 %define repo github.com/tektoncd/cli
-%if ! 0%{?gobuild:1}
-%global gobuild(o:) go build -ldflags "${LDFLAGS:-} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n')" -a -v -x %{?**};
+
+%if %{undefined gobuild}
+%define gobuild(o:) go build -ldflags "${LDFLAGS:-} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n')" -a -v -x %{?**};
 %endif
+
 Name:           tkn
 Version:        0.1.2
 Release:        1%{?dist}
@@ -10,7 +12,6 @@ Summary:        A CLI for interacting with Tekton!
 License:        Apache 2.0
 URL:            https://%{repo}
 
-%{?go_compiler:BuildRequires: compiler(go-compiler)}
 BuildRequires: golang >= 1.10
 BuildRequires: git
 
@@ -602,7 +603,9 @@ install -D -m 0755 _bin/tkn %{buildroot}%{_bindir}/tkn
 %{_bindir}/tkn
 
 %changelog
-* Thu Jun 20 2019 Khurram Baig <kbaig@redhat.com> 0.12
+* Tue Jul 02 2019 Khurram Baig <kbaig@redhat.com> 0.1.2
+- Make Spec compliant to guidelines
+* Thu Jun 20 2019 Khurram Baig <kbaig@redhat.com> 0.1.2
 - Initial version of the rpm
 
 
